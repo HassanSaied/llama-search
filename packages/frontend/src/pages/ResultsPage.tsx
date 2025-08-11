@@ -4,100 +4,6 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { type UserQuery} from '@llama-search/types';
 import { type LlmSearchResults } from '@llama-search/types';
 
-// Define types for the chat feature
-type ChatMessage = {
-    sender: 'user' | 'bot';
-    text: string;
-};
-// ++ CHATBOX COMPONENT ++
-// This new component encapsulates the chat functionality.
-const ChatBox = ({ initialQuery }: { initialQuery: string }) => {
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
-    const [userInput, setUserInput] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-
-    const handleSendMessage = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!userInput.trim()) return;
-
-        const userMessage: ChatMessage = { sender: 'user', text: userInput };
-        setMessages(prev => [...prev, userMessage]);
-        setUserInput('');
-        setIsLoading(true);
-
-        try {
-            // Send the initial search query, chat history, and new message to the server
-            const response = await fetch('http://localhost:3000/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    query: initialQuery,
-                    message: userInput,
-                    history: [...messages, userMessage], // Send the up-to-date history
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const responseData = await response.json();
-            const botMessage: ChatMessage = { sender: 'bot', text: responseData.response };
-            setMessages(prev => [...prev, botMessage]);
-
-        } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-            const botError: ChatMessage = { sender: 'bot', text: `Sorry, something went wrong: ${errorMessage}` };
-            setMessages(prev => [...prev, botError]);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    return (
-        <div style={{ marginTop: '40px', borderTop: '2px solid #eee', paddingTop: '20px' }}>
-            <h2>Chat about these results</h2>
-            {/* Message display area */}
-            <div style={{ height: '300px', overflowY: 'auto', border: '1px solid #ccc', padding: '10px', marginBottom: '10px', borderRadius: '8px' }}>
-                {messages.map((msg, index) => (
-                    <div key={index} style={{
-                        textAlign: msg.sender === 'user' ? 'right' : 'left',
-                        marginBottom: '10px',
-                    }}>
-                        <span style={{
-                            backgroundColor: msg.sender === 'user' ? '#007bff' : '#e9ecef',
-                            color: msg.sender === 'user' ? 'white' : 'black',
-                            padding: '8px 12px',
-                            borderRadius: '15px',
-                            display: 'inline-block',
-                            maxWidth: '70%',
-                        }}>
-                            {msg.text}
-                        </span>
-                    </div>
-                ))}
-                {isLoading && <p style={{ textAlign: 'left', fontStyle: 'italic', color: '#666' }}>Bot is typing...</p>}
-            </div>
-            {/* Input form */}
-            <form onSubmit={handleSendMessage} style={{ display: 'flex' }}>
-                <input
-                    type="text"
-                    value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
-                    placeholder="Ask a follow-up question..."
-                    disabled={isLoading}
-                    style={{ flex: 1, padding: '10px', borderRadius: '5px 0 0 5px', border: '1px solid #ccc' }}
-                />
-                <button type="submit" disabled={isLoading} style={{ padding: '10px 15px', borderRadius: '0 5px 5px 0', border: '1px solid #007bff', backgroundColor: '#007bff', color: 'white' }}>
-                    Send
-                </button>
-            </form>
-        </div>
-    );
-};
-
 
 export function ResultsPage() {
     const [searchParams] = useSearchParams();
@@ -185,10 +91,6 @@ export function ResultsPage() {
                             </div>
                         ))}
                     </div>
-
-                    {/* ++ RENDER THE CHATBOX ++ */}
-                    {/* It only appears after the initial results are loaded. */}
-                    {/*<ChatBox initialQuery={data.query} />*/}
 
                 </div>
             )}

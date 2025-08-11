@@ -1,13 +1,5 @@
 import express, {Request, Response} from 'express';
 import cors from 'cors';
-import {llm_search} from "./llm_integration"
-import {performWebSearch, searchArxiv} from "./web_searcher";
-import {type UserQuery, type LlmSearchResults as searchResults, type ArxivSearchParams} from "@llama-search/types";
-import cookieParser from 'cookie-parser';
-import { v4 as uuidv4 } from 'uuid';
-
-
-
 import dotenv from 'dotenv';
 import path from 'path';
 
@@ -28,14 +20,24 @@ const validateEnvVariables = () => {
 validateEnvVariables();
 // --- End Validation ---
 
+
+import {llm_search} from "./llm_integration"
+import {performWebSearch, searchArxiv} from "./web_searcher";
+import {type UserQuery, type LlmSearchResults as searchResults, type ArxivSearchParams} from "@llama-search/types";
+import cookieParser from 'cookie-parser';
+import { v4 as uuidv4 } from 'uuid';
+
+
+
+
+
 const app = express();
 const port = 3000;
 
 
 const corsOptions = {
-    origin: 'http://localhost:5173'
+    origin: ['http://localhost:5173','http://localhost:4173']
 };
-
 
 app.use(cors(corsOptions)); // 👈 Use the cors middleware
 app.use(cookieParser());

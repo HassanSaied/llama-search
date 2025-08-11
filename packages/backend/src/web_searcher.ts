@@ -42,7 +42,7 @@ export const performWebSearch = async (query: UserQuery): Promise<string[] | und
 
     const BRAVE_API_KEY = braveKey || "";
     const user_query: UserQuery = query;
-
+    console.log("brave_key",BRAVE_API_KEY);
     const braveSearch = new BraveSearch(BRAVE_API_KEY);
     const webSearchResults = await braveSearch.webSearch(user_query.query, {
         count: user_query.result_count,
