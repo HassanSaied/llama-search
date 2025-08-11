@@ -1,0 +1,15 @@
+{
+  "name": "@llama-search/types",
+  "version": "1.0.0",
+  "main": "dist/types.js",
+  "types": "dist/types.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "zod": "^4.0.17"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
