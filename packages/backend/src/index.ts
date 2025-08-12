@@ -32,8 +32,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 const app = express();
-const port = 3000;
-
+const port = process.env.PORT || 3000;
 
 const corsOptions = {
     origin: ['http://localhost:5173','http://localhost:4173']

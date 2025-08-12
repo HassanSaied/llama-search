@@ -5,6 +5,7 @@ import { type UserQuery} from '@llama-search/types';
 import { type LlmSearchResults } from '@llama-search/types';
 
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export function ResultsPage() {
     const [searchParams] = useSearchParams();
     const query = searchParams.get('q');
@@ -31,8 +32,8 @@ export function ResultsPage() {
 
                 // 2. Determine the correct endpoint based on searchType
                 const endpoint = searchType === 'academic'
-                    ? 'http://localhost:3000/process-academic-query'
-                    : 'http://localhost:3000/process-query';
+                    ? `${API_BASE_URL}/process-academic-query`
+                    : `${API_BASE_URL}/process-query`;
 
                 // Use the selected endpoint in the fetch call
                 const response = await fetch(endpoint, {
